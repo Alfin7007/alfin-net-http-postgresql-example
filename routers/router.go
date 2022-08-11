@@ -30,4 +30,25 @@ func RouterSetup(presenter factory.Presenter) {
 			return
 		}
 	})
+	http.HandleFunc("/articles", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case "POST":
+			presenter.ArticlePresenter.InsertArticle(w, r)
+			return
+		case "GET":
+			presenter.ArticlePresenter.GetAllArticle(w, r)
+		default:
+			helper.FailedMethodNotAllowed(w)
+			return
+		}
+	})
+	http.HandleFunc("/articles/", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case "GET":
+			presenter.ArticlePresenter.GetArticle(w, r)
+		default:
+			helper.FailedMethodNotAllowed(w)
+			return
+		}
+	})
 }
